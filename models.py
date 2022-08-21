@@ -47,7 +47,7 @@ class NearEarthObject:
         self.designation = designation if designation else ''
         self.name = name if name else None
         self.diameter = float(diameter if diameter else float('nan'))
-        self.hazardous = hazardous if hazardous else False
+        self.hazardous = bool(hazardous if hazardous else False)
         for key,value in info.items():
             self.key = value
 
@@ -65,7 +65,7 @@ class NearEarthObject:
         # TODO: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        return f" NEO {self.fullname} has a diameter of {self.diameter:.2f} km and "  +  (f"is" if (self.hazardous and self.hazardous =="Y") else f"is not") + f" potentially hazardous."
+        return f" NEO {self.fullname} has a diameter of {self.diameter:.3f} km and "  +  (f"is" if (self.hazardous and self.hazardous =="Y") else f"is not") + f" potentially hazardous."
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
