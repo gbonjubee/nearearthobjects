@@ -72,6 +72,13 @@ class NearEarthObject:
         return (f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, "
                 f"diameter={self.diameter:.2f}, hazardous={self.hazardous!r})")
 
+    def to_json(self):
+        return {
+            "designation": self.designation,
+            "name": self.name,
+            "diameter_km":self.diameter,
+            "potentially_hazardous": self.hazardous
+        }
 
 class CloseApproach:
     """A close approach to Earth by an NEO.
@@ -128,7 +135,6 @@ class CloseApproach:
 
     def __str__(self):
         """Return `str(self)`."""
-        # TODO: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
         return f"At {self.time_str!r}, {self.neo!r} approaches Earth at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s."
@@ -137,3 +143,24 @@ class CloseApproach:
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return (f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, "
                 f"velocity={self.velocity:.2f}, neo={self.neo!r})")
+
+    def to_json(self):
+        return {
+            "datetime_utc": self.time_str,
+            "distance_au":self.distance,
+            "velocity_km_s": self.velocity,
+            "neo": self.neo.to_json()
+    }
+
+    def to_csv(self):
+        return {
+            "datetime_utc": self.time_str,
+            "distance_au": self.distance,
+            "velocity_km_s": self.velocity,
+            "designation": self.neo.designation,
+            "name": self.neo.name,
+            "diameter_km": self.neo.diameter,
+            "potentially_hazardous": self.neo.hazardous
+        }
+
+
