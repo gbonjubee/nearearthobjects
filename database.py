@@ -41,13 +41,9 @@ class NEODatabase:
 
         self._neos = neos
         self._approaches = approaches
-
-        # TODO: What additional auxiliary data structures will be useful?
         self._neos_by_des = {neo.designation: i for i, neo in enumerate(self._neos)
                            if neo.designation is not None}
-        self._neos_by_name = {neo.name: i for i, neo in enumerate(self._neos)
-                            if neo.name is not None}
-        # TODO: Link together the NEOs and their close approaches.
+
         for approach in self._approaches:
             approach.neo = self._neos[self._neos_by_des[approach._designation]]
             approach.neo.approaches.append(approach)
@@ -110,7 +106,6 @@ class NEODatabase:
         :param filters: A collection of filters capturing user-specified criteria.
         :return: A stream of matching `CloseApproach` objects.
         """
-        # TODO: Generate `CloseApproach` objects that match all of the filters.
         if filters:
             for approach in self._approaches:
                 if all(map(lambda f: f(approach), filters)):
