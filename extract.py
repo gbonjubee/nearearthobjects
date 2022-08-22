@@ -1,4 +1,4 @@
-"""Extract data on NEO and close approaches from CSV and JSON files.
+"""Extract data on NEO and close approaches from CSV and JSONfiles.
 
 The `load_neos` function extracts NEO data from a CSV file, formatted as
 described in the project instructions, into a collection of `NearEarthObject`s.
@@ -45,11 +45,12 @@ def load_approaches(cad_json_path):
     with open(cad_json_path, 'r') as infile:
         cad_obj = json.load(infile)
         data = cad_obj["data"]
+        fields = cad_obj["fields"]
         for value in data:
-            time = value[3]
-            distance = value[4]
-            velocity = value[7]
-            designation = value[0]
+            time = value[fields.index('cd')]
+            distance = value[fields.index('dist')]
+            velocity = value[fields.index('v_rel')]
+            designation = value[fields.index('des')]
 
             approach = CloseApproach(time, distance, velocity)
             approach._designation = designation

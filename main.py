@@ -260,6 +260,7 @@ def query(database, args):
         diameter_min=args.diameter_min, diameter_max=args.diameter_max,
         hazardous=args.hazardous
     )
+    print(filters)
     # Query the database with the collection of filters.
     results = database.query(filters)
 

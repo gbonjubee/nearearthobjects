@@ -45,32 +45,43 @@ class NearEarthObject:
         # appropriate data type and handle any edge cases, such as a empty
         # name being represented by `None` and a missing diameter being
         # represented by `float('nan')`.
-        self.designation = designation if designation else ''
-        self.name = name if name else None
-        self.diameter = float(diameter if diameter else float('nan'))
-        self.hazardous = bool(hazardous if hazardous else False)
-        for key, value in info.items():
-            self.key = value
+        try:
+            self.designation = designation if designation else ''
+            self.name = name if name else None
+            self.diameter = float(diameter if diameter else 'nan')
+            self.hazardous = bool(hazardous if hazardous else False)
+            for key, value in info.items():
+                self.key = value
 
-        # Create an empty initial collection of linked approaches.
-        self.approaches = []
+            # Create an empty initial collection of linked approaches.
+            self.approaches = []
+        except ValueError as e:
+            raise ValueError("An error occurred while initializing "
+                             "NearEarthObject", e)
 
     @property
     def fullname(self):
         """Return a representation of the full name of this NEO."""
-        return f"{self.designation}({self.name})"\
-            if (
-                f"{self.name}" and f"{self.name}" != "None") \
-            else f"{self.designation} "
+        try:
+            return f"{self.designation}({self.name})" \
+                if (
+                    f"{self.name}" and f"{self.name}" != "None") \
+                else f"{self.designation} "
+        except KeyError:
+            return None
 
     def __str__(self):
         """Return `str(self)`."""
         # The project instructions include one possibility. Peek at the
         # __repr__ method for examples of advanced string formatting.
-        return f" NEO {self.fullname} has a diameter of {self.diameter:.3f} " \
-               f"km and " + (f"is" if (self.hazardous and
-                                       self.hazardous == "Y") else f"is not") \
-               + f" potentially hazardous. "
+        try:
+            return f" NEO {self.fullname} has a diameter of " \
+                   f"{self.diameter:.3f} " \
+                   f"km and " + (f"is" if (self.hazardous and self.hazardous
+                                           == "Y") else f"is not") \
+                   + f" potentially hazardous. "
+        except (TypeError, KeyError):
+            return None
 
     def __repr__(self):
         """Return computer-readable string representation of this object.
@@ -88,12 +99,15 @@ class NearEarthObject:
 
         :return: A JSON formatted value of NearEarthObject .
         """
-        return {
-            "designation": self.designation,
-            "name": self.name,
-            "diameter_km": self.diameter,
-            "potentially_hazardous": self.hazardous
-        }
+        try:
+            return {
+                "designation": self.designation,
+                "name": self.name,
+                "diameter_km": self.diameter,
+                "potentially_hazardous": self.hazardous
+            }
+        except (TypeError, KeyError):
+            return {}
 
 
 class CloseApproach:
@@ -121,15 +135,19 @@ class CloseApproach:
         # and `velocity`. You should coerce these values to their
         # appropriate data type and handle any edge cases. The
         # `cd_to_datetime` function will be useful.
-        self._designation = '' if neo is None else neo.designation
-        self.time = cd_to_datetime(time) if time else None
-        self.distance = float(distance if distance else 0.0)
-        self.velocity = float(velocity if velocity else 0.0)
-        for key, value in info.items():
-            self.key = value
+        try:
+            self._designation = '' if neo is None else neo.designation
+            self.time = cd_to_datetime(time) if time else None
+            self.distance = float(distance if distance else 'nan')
+            self.velocity = float(velocity if velocity else 'nan')
+            for key, value in info.items():
+                self.key = value
 
-        # Create an attribute for the referenced NEO, originally None.
-        self.neo = neo
+            # Create an attribute for the referenced NEO, originally None.
+            self.neo = neo
+        except (ValueError, TypeError) as error:
+            raise ValueError("An error occurred while initializing "
+                             "CloseApproach", error)
 
     @property
     def time_str(self):
