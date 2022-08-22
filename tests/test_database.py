@@ -1,8 +1,9 @@
-"""Check that an `NEODatabase` can be constructed and responds to inspect queries.
+"""Check that an `NEODatabase` can be constructed and responds to inspect
+queries.
 
-The `NEODatabase` constructor should cross-link NEOs and their close approaches,
-as well as prepare any additional metadata needed to support the `get_neo_by_*`
-methods.
+The `NEODatabase` constructor should cross-link NEOs and their close
+approaches, as well as prepare any additional metadata needed to support the
+`get_neo_by_*` methods.
 
 To run these tests from the project root, run:
 
@@ -20,7 +21,7 @@ from database import NEODatabase
 
 
 # Paths to the test data files.
-TESTS_ROOT = (pathlib.Path(__file__).parent).resolve()
+TESTS_ROOT = pathlib.Path(__file__).parent.resolve()
 TEST_NEO_FILE = TESTS_ROOT / 'test-neos-2020.csv'
 TEST_CAD_FILE = TESTS_ROOT / 'test-cad-2020.json'
 
@@ -36,22 +37,23 @@ class TestDatabase(unittest.TestCase):
         for approach in self.approaches:
             self.assertIsNotNone(approach.neo)
 
-    def test_database_construction_ensures_each_neo_has_an_approaches_attribute(self):
+    def test_database_to_ensure_each_neo_has_an_approaches_attribute(self):
         for neo in self.neos:
             self.assertTrue(hasattr(neo, 'approaches'))
 
-    def test_database_construction_ensures_neos_collectively_exhaust_approaches(self):
+    def test_database_to_ensure_neos_collectively_exhaust_approaches(self):
         approaches = set()
         for neo in self.neos:
             approaches.update(neo.approaches)
         self.assertEqual(approaches, set(self.approaches))
 
-    def test_database_construction_ensures_neos_mutually_exclude_approaches(self):
+    def test_database_to_ensure_neos_mutually_exclude_approaches(self):
         seen = set()
         for neo in self.neos:
             for approach in neo.approaches:
                 if approach in seen:
-                    self.fail(f"{approach} appears in the approaches of multiple NEOs.")
+                    self.fail(f"{approach} appears in the approaches of "
+                              f"multiple NEOs.")
                 seen.add(approach)
 
     def test_get_neo_by_designation(self):
